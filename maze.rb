@@ -43,22 +43,11 @@ class Maze
   #determines whether a maze is solvable or not.
   #returns true if solvable or string "Error" if it is not.
   def solve(begX,begY,endX,endY)
-    queue = Queue.new
-    initial_node = @point.new(begX,begY)
-    final_node = @point.new(endX,endY)
-    queue.push(initial_node) #push initial node to queue and then perform BFS.
-    while (not queue.empty?) do
-    value = queue.deq
-      if value == final_node #the node we want
-        return true
-      else
-      solutions = get_solutions(value) #get array of solutions
-        solutions.each do |value2|
-        queue.push(value2)
-        end
-      end
+    if(begX > 0 && begY > 0 && endX < 8 && endY < 8)
+    bfs(begX,begY,endX,endY,false)
+    else
+      p "Out of range coordinates given"
     end
-    return "Error"
   end
   
   #traces the path of the solution to the maze using BFS.
@@ -66,6 +55,14 @@ class Maze
   #keeps track of its parent.
   #returns void
   def trace(begX,begY,endX,endY)
+    if(begX > 0 && begY > 0 && endX < 8 && endY < 8)
+      bfs(begX,begY,endX,endY,true)
+    else
+      p "Out of range coordinates given"
+    end
+  end
+  
+  def bfs(begX,begY,endX,endY,do_trace)
     queue = Queue.new
     final_point = @point.new(endX,endY)
     initial_node = @node.new(@node.new(nil,@point.new(-1,-1)),@point.new(begX,begY))
@@ -73,8 +70,12 @@ class Maze
     while (not queue.empty?) do
     value = queue.deq
       if value.value == final_point 
-          print_tree(value)
+          if do_trace
+            print_tree(value)
           return
+          else
+            return true
+          end
        else
        solutions = get_solutions(value)
          solutions.each do |value2|
@@ -82,9 +83,12 @@ class Maze
          end
        end
     end
-    p "Error"
+    return "Error"
   end
    
+    
+  
+  
   #prints node tree in reverse order or from the beginning node
   #to the end node
   def print_tree(value)
@@ -130,3 +134,6 @@ class Maze
   
 end
   
+test = Maze.new(9,9)
+test.load("111111111100010001111010101100010101101110101100000101111011101100000101111111111")
+test.trace(2,1,1,5)

@@ -1,5 +1,9 @@
+#Chi Ieong Tai
+#COSI 236b PA3
+#Attempt at randomly generating maze using backtrack algorthim
+#class does not work. Could not finish because was sick
+
 class MazeGenerator
-  
   
   def initialize(n,m)
     
